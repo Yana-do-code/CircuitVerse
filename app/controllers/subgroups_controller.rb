@@ -57,7 +57,7 @@ class SubgroupsController < ApplicationController
     @subgroup = @group.subgroups.find(params[:id])
     authorize @subgroup, :add_member?
 
-    group_member = @group.group_members.find_by(id: params[:group_member_id])
+    group_member = @group.group_members.member.joins(:user).find_by(users: { email: params[:email] })
 
     if group_member.nil?
       redirect_to group_subgroup_path(@group, @subgroup),
