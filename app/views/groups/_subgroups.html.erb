@@ -1,0 +1,31 @@
+<% group.subgroups.each do |subgroup| %>
+  <div class="col-md-4 col-sm-6 mb-3">
+    <div class="card h-100">
+      <div class="card-body">
+        <h5 class="card-title">
+          <%= link_to subgroup.name, group_subgroup_path(group, subgroup),
+                      class: "anchor-text" %>
+        </h5>
+        <p class="card-text text-muted small">
+          <%= t("subgroups.member_count", count: subgroup.subgroup_members.size) %>
+        </p>
+        <% if policy(subgroup).update? %>
+          <div class="d-flex gap-2 mt-2">
+            <%= link_to edit_group_subgroup_path(group, subgroup),
+                        class: "mini-button groups-reopen-mini-button" do %>
+              <%= image_tag("svgs/editGroup.svg", alt: "Edit Subgroup") %>
+              <span><%= t("edit") %></span>
+            <% end %>
+            <%= button_to group_subgroup_path(group, subgroup),
+                          method: :delete,
+                          class: "mini-button groups-delete-mini-button",
+                          form: { data: { turbo_confirm: t("subgroups.show.delete_confirm") } } do %>
+              <%= image_tag("svgs/deleteGroup.svg", alt: "Delete Subgroup") %>
+              <span><%= t("delete") %></span>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+<% end %>

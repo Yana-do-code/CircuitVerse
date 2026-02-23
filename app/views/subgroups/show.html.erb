@@ -1,0 +1,135 @@
+<% content_for :title, @subgroup.name %>
+
+<div class="container">
+  <% if notice %>
+    <div class="row" id="alertdiv">
+      <div class="alert alert-success alert-dismissible container text-center">
+        <a href="#" class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
+        <h6><%= notice %></h6>
+      </div>
+    </div>
+  <% end %>
+  <% if alert %>
+    <div class="row" id="alertdiv">
+      <div class="alert alert-danger alert-dismissible container text-center">
+        <a href="#" class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
+        <h6><%= alert %></h6>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="row center-row">
+    <div class="col">
+      <h1 class="submain-heading">
+        <%= @subgroup.name %>
+        <% if policy(@subgroup).update? %>
+          <%= link_to edit_group_subgroup_path(@group, @subgroup),
+                      class: "btn primary-button groups-editname-primary-button ms-2" do %>
+            <%= image_tag("svgs/editGroup.svg", alt: "Edit Subgroup") %>
+            <span><%= t("subgroups.show.edit_btn") %></span>
+          <% end %>
+        <% end %>
+      </h1>
+      <p class="text-muted">
+        <%= t("subgroups.show.group_label") %>
+        <%= link_to @group.name, group_path(@group), class: "anchor-text" %>
+      </p>
+    </div>
+  </div>
+
+  <!-- Current Members -->
+  <div class="d-flex justify-content-between align-items-center mb-2">
+    <h3 class="mb-0"><%= t("subgroups.show.members_heading") %></h3>
+  </div>
+  <hr>
+
+  <% if @members_in_subgroup.empty? %>
+    <span class="null-text"><%= t("subgroups.show.no_members_html") %></span>
+  <% else %>
+    <div class="row">
+      <% @members_in_subgroup.each do |group_member| %>
+        <div class="col-md-4 col-sm-6 mb-3">
+          <div class="card h-100">
+            <div class="card-body d-flex align-items-center">
+              <span class="groups-members-card-avatar me-2">
+                <% if group_member.user.profile_picture.present? %>
+                  <%= link_to image_tag(group_member.user.profile_picture.url,
+                                        alt: group_member.user.name,
+                                        class: "rounded-circle",
+                                        width: 40, height: 40),
+                               user_path(group_member.user.id) %>
+                <% else %>
+                  <i class="fa fa-user fa-2x"></i>
+                <% end %>
+              </span>
+              <div class="flex-grow-1">
+                <%= link_to group_member.user.name, group_member.user,
+                             class: "groups-members-card-name" %>
+                <% if policy(@subgroup).remove_member? %>
+                  <p class="mb-0 small text-muted"><%= group_member.user.email %></p>
+                <% end %>
+              </div>
+              <% if policy(@subgroup).remove_member? %>
+                <%= button_to remove_member_group_subgroup_path(@group, @subgroup),
+                               method: :delete,
+                               params: { group_member_id: group_member.id },
+                               class: "btn btn-sm btn-outline-danger ms-2",
+                               form: { data: { turbo_confirm: t("subgroups.show.remove_confirm") } } do %>
+                  <%= image_tag("svgs/deleteGroup.svg", alt: "Remove") %>
+                  <span><%= t("remove") %></span>
+                <% end %>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+
+  <!-- Add Members (admin only) -->
+  <% if policy(@subgroup).add_member? && @members_not_in_subgroup.any? %>
+    <div class="d-flex justify-content-between align-items-center mb-2 mt-4">
+      <h3 class="mb-0"><%= t("subgroups.show.add_members_heading") %></h3>
+    </div>
+    <hr>
+
+    <%= form_with url: add_member_group_subgroup_path(@group, @subgroup),
+                  method: :post,
+                  local: true,
+                  class: "d-flex align-items-center gap-3 mb-4" do |form| %>
+      <div class="flex-grow-1">
+        <%= form.select :group_member_id,
+                        @members_not_in_subgroup.map { |gm| [gm.user.name, gm.id] },
+                        { prompt: t("subgroups.show.select_member_prompt") },
+                        class: "form-select" %>
+      </div>
+      <%= form.submit t("subgroups.show.add_member_btn"), class: "btn primary-button" %>
+    <% end %>
+  <% end %>
+
+  <!-- Danger Zone -->
+  <% if policy(@subgroup).destroy? %>
+    <div class="mt-5">
+      <hr>
+      <div class="d-flex justify-content-between align-items-center">
+        <div>
+          <h5 class="text-danger"><%= t("subgroups.show.delete_heading") %></h5>
+          <p class="text-muted mb-0"><%= t("subgroups.show.delete_description") %></p>
+        </div>
+        <%= button_to group_subgroup_path(@group, @subgroup),
+                      method: :delete,
+                      class: "btn btn-outline-danger",
+                      form: { data: { turbo_confirm: t("subgroups.show.delete_confirm") } } do %>
+          <%= image_tag("svgs/deleteGroup.svg", alt: "Delete Subgroup") %>
+          <span><%= t("delete") %></span>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="row mt-4">
+    <div class="col-12">
+      <%= link_to t("back"), group_path(@group), class: "anchor-text" %>
+    </div>
+  </div>
+</div>

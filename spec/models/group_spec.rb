@@ -13,6 +13,7 @@ RSpec.describe Group, type: :model do
     it { is_expected.to have_many(:group_members) }
     it { is_expected.to have_many(:assignments) }
     it { is_expected.to have_many(:pending_invitations) }
+    it { is_expected.to have_many(:subgroups).dependent(:destroy) }
   end
 
   describe "callbacks" do

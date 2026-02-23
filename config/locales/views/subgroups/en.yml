@@ -1,0 +1,29 @@
+en:
+  subgroups:
+    member_count:
+      one: "1 member"
+      other: "%{count} members"
+    form:
+      name_label: "Subgroup Name"
+      name_placeholder: "e.g. Team A"
+    new:
+      title: "New Subgroup"
+      main_heading: "NEW SUBGROUP"
+    edit:
+      title: "%{name} - Edit Subgroup"
+      main_heading: "EDIT SUBGROUP"
+    show:
+      section_heading: "SUBGROUPS:"
+      add_subgroup_btn: "+ Add Subgroup"
+      no_subgroups_html: "There are no subgroups in this group, click <strong>+ Add Subgroup</strong> button to create one."
+      edit_btn: "Edit Name"
+      group_label: "Group:"
+      members_heading: "MEMBERS:"
+      no_members_html: "No members in this subgroup yet."
+      add_members_heading: "ADD MEMBERS:"
+      select_member_prompt: "Select a member..."
+      add_member_btn: "Add to Subgroup"
+      remove_confirm: "Are you sure you want to remove this member from the subgroup?"
+      delete_heading: "Delete Subgroup"
+      delete_description: "This will permanently delete the subgroup and remove all its member associations."
+      delete_confirm: "Are you sure you want to delete this subgroup? This cannot be undone."

@@ -69,6 +69,24 @@
   <%= render partial: "group_members", locals: { group: @group } %>
 </div>
 
+<!-- Subgroups Section -->
+<div class="d-flex justify-content-between align-items-center mb-2 mt-4">
+  <h3 class="mb-0"><%= t("subgroups.show.section_heading") %></h3>
+  <% if policy(@group).admin_access? %>
+    <%= link_to t("subgroups.show.add_subgroup_btn"),
+                new_group_subgroup_path(@group),
+                class: "btn primary-button groups-primary-button" %>
+  <% end %>
+</div>
+<hr>
+<% if @group.subgroups.empty? %>
+  <span class="null-text"><%= t("subgroups.show.no_subgroups_html") %></span>
+<% else %>
+  <div class="row">
+    <%= render partial: "subgroups", locals: { group: @group } %>
+  </div>
+<% end %>
+
 <!-- Assignments Section -->
 <div class="d-flex justify-content-between align-items-center mb-2">
   <h3 class="mb-0"><%= t("groups.show.assignment.heading") %></h3>

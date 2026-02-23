@@ -9,6 +9,7 @@ class Group < ApplicationRecord
 
   has_many :assignments, dependent: :destroy
   has_many :pending_invitations, dependent: :destroy
+  has_many :subgroups, dependent: :destroy
 
   after_commit :send_creation_mail, on: :create
   scope :with_valid_token, -> { where(token_expires_at: Time.zone.now..) }

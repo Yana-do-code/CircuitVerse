@@ -4,6 +4,8 @@ class GroupMember < ApplicationRecord
   belongs_to :group, counter_cache: true
   belongs_to :user
   has_many :assignments, through: :group
+  has_many :subgroup_members, dependent: :destroy
+  has_many :subgroups, through: :subgroup_members
 
   after_commit :send_welcome_email, on: :create
   scope :mentor, -> { where(mentor: true) }
